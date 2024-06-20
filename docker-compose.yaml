@@ -10,6 +10,17 @@ services:
     volumes:
       - .:/usr/src/app
 
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+
   mongo:
     image: mongo
     ports:
