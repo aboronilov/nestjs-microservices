@@ -8,11 +8,11 @@ import { CardDTO } from './card.dto';
 import { Type } from 'class-transformer';
 
 export class CreateChargeDTO {
-  @IsDefined()
-  @IsNotEmptyObject()
+  // @IsDefined()
+  // @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => CardDTO)
-  card: CardDTO;
+  card?: CardDTO;
 
   @IsNumber()
   amount: number;

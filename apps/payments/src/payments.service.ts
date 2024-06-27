@@ -6,7 +6,7 @@ import { CreateChargeDTO } from '@app/common';
 @Injectable()
 export class PaymentsService {
   private readonly stripe = new Stripe(
-    this.configService.get<string>('STRIPE_SECRET_KEY'),
+    this.configService.get<string>('STRIPE_TEST_KEY'),
     { apiVersion: '2024-06-20' },
   );
 
@@ -15,20 +15,14 @@ export class PaymentsService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createCharge(createChargeDto: CreateChargeDTO) {
-    const { amount, card } = createChargeDto;
-
-    const paymentMethod = await this.stripe.paymentMethods.create({
-      type: 'card',
-      card,
-    });
-
+  async createCharge({ amount, card }: CreateChargeDTO) {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: amount * 100,
-      payment_method: paymentMethod.id,
-      confirm: true,
-      payment_method_types: ['card'],
       currency: 'usd',
+      payment_method: 'pm_card_visa',
+      confirm: true,
+      description: 'My First Test Charge (created for API docs)',
+      return_url: 'https://stripe.com/',
     });
 
     return paymentIntent;
